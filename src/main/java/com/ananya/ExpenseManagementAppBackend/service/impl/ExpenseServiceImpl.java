@@ -2,6 +2,7 @@ package com.ananya.ExpenseManagementAppBackend.service.impl;
 
 import com.ananya.ExpenseManagementAppBackend.dto.ExpenseDTO;
 import com.ananya.ExpenseManagementAppBackend.entity.ExpenseEntity;
+import com.ananya.ExpenseManagementAppBackend.exceptions.ResourceNotFoundException;
 import com.ananya.ExpenseManagementAppBackend.repository.ExpenseRepository;
 import com.ananya.ExpenseManagementAppBackend.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,20 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .map(this::mapToExpenseDTO)
                 .toList();
 
+    }
+
+    /**
+     * It will fetch a single expense details from the database
+     *
+     * @param expenseId
+     * @return ExpenseDTO
+     */
+    @Override
+    public ExpenseDTO getExpenseByExpenseId(String expenseId) {
+        ExpenseEntity expenseEntity = expenseRepository.findByExpenseId(expenseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Expense not found for the id " + expenseId));
+        log.info("Printing the expense entity details {}", expenseEntity);
+        return mapToExpenseDTO(expenseEntity);
     }
 
     /**
