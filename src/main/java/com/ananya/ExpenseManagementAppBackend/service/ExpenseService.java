@@ -25,5 +25,13 @@ public interface ExpenseService {
      * @return ExpenseDTO
      */
     ExpenseDTO getExpenseByExpenseId(String expenseId);
+
+    /**
+     * It will delete a single expense from the database
+     *
+     * @param expenseId
+     * @return void
+     */
+    void deleteExpenseByExpenseId(String expenseId);
 }
 
