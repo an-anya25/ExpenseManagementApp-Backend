@@ -1,8 +1,10 @@
 package com.ananya.ExpenseManagementAppBackend.controller;
 
 import com.ananya.ExpenseManagementAppBackend.dto.ExpenseDTO;
+import com.ananya.ExpenseManagementAppBackend.io.ExpenseRequest;
 import com.ananya.ExpenseManagementAppBackend.io.ExpenseResponse;
 import com.ananya.ExpenseManagementAppBackend.service.ExpenseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -70,6 +72,32 @@ public class ExpenseController {
     public void deleteExpenseByExpenseId(@PathVariable String expenseId) {
         log.info("API DELETE /expenses/{} called", expenseId);
         expenseService.deleteExpenseByExpenseId(expenseId);
+    }
+
+    /**
+     * It will save a single expense to the database
+     *
+     * @param expenseRequest
+     * @return ExpenseResponse
+     **/
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/expenses")
+    public ExpenseResponse saveExpenseDetails(@Valid @RequestBody ExpenseRequest expenseRequest) {
+        log.info("API POST /expenses called {}", expenseRequest);
+        ExpenseDTO expenseDTO = mapToExpenseDTO(expenseRequest);
+        expenseDTO = expenseService.saveExpenseDetails(expenseDTO);
+        log.info("Printing the expenseDTO {}", expenseDTO);
+        return mapToExpenseResponse(expenseDTO);
+    }
+
+    /**
+     * Mapper method to map expense request to expense dto
+     *
+     * @param expenseRequest
+     * @return ExpenseDTO
+     */
+    private ExpenseDTO mapToExpenseDTO(ExpenseRequest expenseRequest) {
+        return modelMapper.map(expenseRequest, ExpenseDTO.class);
     }
 
     /**
