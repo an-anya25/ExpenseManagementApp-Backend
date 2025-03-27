@@ -39,7 +39,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         return expenseEntityList.stream()
                 .map(this::mapToExpenseDTO)
                 .toList();
-
     }
 
     /**
@@ -81,6 +80,26 @@ public class ExpenseServiceImpl implements ExpenseService {
         newExpenseEntity = expenseRepository.save(newExpenseEntity);
         log.info("Printing the new expense entity details{}", newExpenseEntity);
         return mapToExpenseDTO(newExpenseEntity);
+    }
+
+    /**
+     * It will save expense details to the database
+     *
+     * @param expenseId
+     * @param expenseDTO
+     * @return ExpenseDTO
+     */
+    @Override
+    public ExpenseDTO updateExpenseByExpenseId(String expenseId, ExpenseDTO expenseDTO) {
+        ExpenseEntity existingExpense = getExpenseEntity(expenseId);
+        ExpenseEntity updatedExpenseEntity = mapToExpenseEntity(expenseDTO);
+        updatedExpenseEntity.setId(existingExpense.getId());
+        updatedExpenseEntity.setExpenseId(existingExpense.getExpenseId());
+        updatedExpenseEntity.setCreatedAt(existingExpense.getCreatedAt());
+        updatedExpenseEntity.setUpdatedAt(existingExpense.getUpdatedAt());
+        updatedExpenseEntity = expenseRepository.save(updatedExpenseEntity);
+        log.info("Printing the updated expense entity details{}", updatedExpenseEntity);
+        return mapToExpenseDTO(updatedExpenseEntity);
     }
 
     /**
