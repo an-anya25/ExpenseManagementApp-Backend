@@ -83,7 +83,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     /**
-     * It will save expense details to the database
+     * It will update expense details to the database
      *
      * @param expenseId
      * @param expenseDTO
